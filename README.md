@@ -1,4 +1,4 @@
 # rhg
-*Raella Han Ger* 
+*Raella Han Ger* - *Song of Stone*
 
 Obsidian File Management &amp; Analysis
