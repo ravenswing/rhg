@@ -20,13 +20,17 @@ class Note:
     content: list[str] | None = None
     properties: dict | None = None
     tags: list[str] | None = None
+    _mtime: float | None = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
         if any([x is None for x in [self.name, self.content]]):
             assert os.path.exists(self.path), (
                 "Must provide name and content for non-existant Note."
             )
+            # Get the note name from the file path
             self.name = self.path.split("/")[-1][:-3]
+            # Get the last-modified time
+            self._mtime = os.path.getmtime(self.path)
 
             with open(self.path, "r") as f:
                 lines = f.readlines()
@@ -70,7 +74,8 @@ class Note:
             text.extend(dump(self.properties))
             text.append("---\n")
 
-        text.extend(self.content)
+        if self.content:
+            text.extend(self.content)
 
         with open(self.path, "w") as f:
             f.writelines(text)
